@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
 	title: "Create Next App",
@@ -13,19 +14,21 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en">
-			<body className="min-h-screen flex flex-col">
-				{/* Toaster */}
+		<ClerkProvider>
+			<html lang="en">
+				<body className="min-h-screen flex flex-col">
+					{/* Toaster */}
 
-				{/* Header */}
-				<header className="border-b sticky top-0 z-50">
-					<Header />
-				</header>
+					{/* Header */}
+					<header className="border-b sticky top-0 z-50">
+						<Header />
+					</header>
 
-				<div className="bg-[#F4F2ED] flex-1 w-full">
-					<main>{children}</main>
-				</div>
-			</body>
-		</html>
+					<div className="bg-[#F4F2ED] flex-1 w-full">
+						<main>{children}</main>
+					</div>
+				</body>
+			</html>
+		</ClerkProvider>
 	);
 }

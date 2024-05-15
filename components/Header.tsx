@@ -1,6 +1,14 @@
-import { BriefcaseIcon, HomeIcon, MessagesSquare, SearchIcon, UsersIcon } from "lucide-react";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import {
+	BriefcaseIcon,
+	HomeIcon,
+	MessagesSquare,
+	SearchIcon,
+	UsersIcon,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { Button } from "./ui/button";
 
 const Header = () => {
 	return (
@@ -41,8 +49,14 @@ const Header = () => {
 					<MessagesSquare className="h-5" />
 					<p>Messaging</p>
 				</Link>
-				{/* User button if signed in */}
-				{/* Sign in button if not signed in */}
+				<SignedIn>
+					<UserButton />
+				</SignedIn>
+				<SignedOut>
+					<Button asChild variant="secondary">
+						<SignInButton />
+					</Button>
+				</SignedOut>
 			</div>
 		</div>
 	);
