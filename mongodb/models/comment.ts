@@ -1,5 +1,5 @@
 import { User } from "@/types/user";
-import mongoose, { Schema, Document, models } from "mongoose";
+import mongoose, { Schema, Document, models, Model } from "mongoose";
 
 export interface ICommentBase {
 	user: User;
@@ -7,9 +7,12 @@ export interface ICommentBase {
 }
 
 export interface IComment extends Document, ICommentBase {
+    _id: mongoose.ObjectId;
 	createdAt: Date;
 	updatedAt: Date;
 }
+
+interface ICommentModel extends Model<IComment> {}
 
 const CommentSchema = new Schema<IComment>(
 	{
@@ -25,4 +28,4 @@ const CommentSchema = new Schema<IComment>(
 );
 
 export const Comment =
-	models.Comment || mongoose.model<IComment>("Comment", CommentSchema);
+	models.Comment as ICommentModel || mongoose.model<IComment>("Comment", CommentSchema);
