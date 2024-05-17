@@ -1,7 +1,16 @@
+import UserInformation from "@/components/UserInformation";
+
 export default function Home() {
 	return (
-		<main>
-			<h1>Linkedin Clone</h1>
+		<main className="grid grid-cols-1">
+			<section>
+				<UserInformation />
+			</section>
+			<section>
+				{/* Post Form */}
+				{/* Post Feed */}
+			</section>
+			<section>{/* Widget */}</section>
 		</main>
 	);
 }
