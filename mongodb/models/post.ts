@@ -1,16 +1,16 @@
-import { User } from "@/types/user";
+import { IUser } from "@/types/user";
 import mongoose, { Schema, Document, models, Model } from "mongoose";
 import { Comment, IComment, ICommentBase } from "./comment";
 
 export interface IPostBase {
-	user: User;
+	user: IUser;
 	text: string;
 	imageUrl?: string;
 	comments?: IComment[];
 	likes?: string[];
 }
 
-export interface IPost extends Document, IPostBase {
+export interface IPost extends IPostBase, Document {
 	_id: mongoose.ObjectId;
 	createdAt: Date;
 	updatedAt: Date;
@@ -30,7 +30,7 @@ interface IPostStatics {
 
 export interface IPostDocument extends IPost, IPostMethods {}
 
-interface IPostModel extends Model<IPostDocument, IPostStatics> {}
+interface IPostModel extends IPostStatics, Model<IPostDocument> {}
 
 const PostSchema = new Schema<IPostDocument>(
 	{
@@ -94,7 +94,7 @@ PostSchema.methods.removePost = async function () {
 	}
 };
 
-PostSchema.methods.getAllPosts = async function () {
+PostSchema.statics.getAllPosts = async function () {
 	try {
 		const posts = await this.find()
 			.sort({ createdAt: -1 })
