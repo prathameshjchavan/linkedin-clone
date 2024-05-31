@@ -27,9 +27,12 @@ export async function POST(request: Request) {
 		const post = await Post.create(postData);
 
 		return NextResponse.json({ message: "Post created successfully", post });
-	} catch (error) {
+	} catch (error: any) {
 		return NextResponse.json(
-			{ error: `An error occured while creating the post ${error}` },
+			{
+				error: "An error occured while creating the post",
+				message: error.message,
+			},
 			{ status: 500 }
 		);
 	}
@@ -46,7 +49,7 @@ export async function GET(request: Request) {
 		return NextResponse.json(
 			{
 				error: "An error occured while fetching posts",
-                message: error.message
+				message: error.message,
 			},
 			{
 				status: 500,
