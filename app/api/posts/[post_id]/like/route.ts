@@ -34,8 +34,6 @@ export async function POST(
 ) {
 	auth().protect();
 
-	await connectDB();
-
 	const user = await currentUser();
 
 	if (!user)
@@ -43,6 +41,8 @@ export async function POST(
 			{ error: "User not authenticated" },
 			{ status: 401 }
 		);
+
+	await connectDB();
 
 	try {
 		const post = await Post.findById(params.post_id);
