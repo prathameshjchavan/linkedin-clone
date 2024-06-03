@@ -10,12 +10,6 @@ export interface IPostBase {
 	likes?: string[];
 }
 
-export interface IPost extends IPostBase, Document {
-	_id: mongoose.ObjectId;
-	createdAt: Date;
-	updatedAt: Date;
-}
-
 interface IPostMethods {
 	likePost(userId: string): Promise<void>;
 	unlikePost(userId: string): Promise<void>;
@@ -24,15 +18,19 @@ interface IPostMethods {
 	removePost(): Promise<void>;
 }
 
-interface IPostStatics {
-	getAllPosts(): Promise<IPostDocument[]>;
+export interface IPost extends IPostBase, Document, IPostMethods {
+	_id: mongoose.ObjectId;
+	createdAt: Date;
+	updatedAt: Date;
 }
 
-export interface IPostDocument extends IPost, IPostMethods {}
+interface IPostStatics {
+	getAllPosts(): Promise<IPost[]>;
+}
 
-interface IPostModel extends IPostStatics, Model<IPostDocument> {}
+interface IPostModel extends Model<IPost, IPostStatics> {}
 
-const PostSchema = new Schema<IPostDocument>(
+const PostSchema = new Schema<IPost>(
 	{
 		user: {
 			userId: { type: String, required: true },
@@ -101,7 +99,7 @@ PostSchema.statics.getAllPosts = async function () {
 			.populate({ path: "comments", options: { sort: { createdAt: -1 } } })
 			.lean();
 
-		return posts.map((post: IPostDocument) => ({
+		const iposts: IPost[] = posts.map((post: IPost) => ({
 			...post,
 			_id: post._id.toString(),
 			comments: post.comments?.map((comment: IComment) => ({
@@ -109,6 +107,8 @@ PostSchema.statics.getAllPosts = async function () {
 				_id: comment._id.toString(),
 			})),
 		}));
+
+		return iposts;
 	} catch (error) {
 		console.log("Error when getting all posts: ", error);
 	}
@@ -116,4 +116,4 @@ PostSchema.statics.getAllPosts = async function () {
 
 export const Post =
 	(models.Post as IPostModel) ||
-	mongoose.model<IPostDocument, IPostModel>("Post", PostSchema);
+	mongoose.model<IPost, IPostMethods>("Post", PostSchema);

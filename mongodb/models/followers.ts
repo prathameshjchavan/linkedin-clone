@@ -23,7 +23,7 @@ interface IFollowersStatics {
 	getAllFollowing(userId: string): Promise<IFollowers[]>;
 }
 
-interface IFollowersModel extends Model<IFollowers>, IFollowersStatics {}
+interface IFollowersModel extends Model<IFollowers, IFollowersStatics> {}
 
 const FollowersSchema = new Schema<IFollowers>(
 	{
