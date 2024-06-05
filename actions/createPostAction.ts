@@ -1,9 +1,13 @@
 "use server";
 
 import { AddPostRequestBody } from "@/app/api/posts/route";
+import generateSASToken, { containerName } from "@/lib/generateSASToken";
+import connectDB from "@/mongodb/db";
 import { Post } from "@/mongodb/models/post";
 import { IUser } from "@/types/user";
+import { BlobServiceClient } from "@azure/storage-blob";
 import { currentUser } from "@clerk/nextjs/server";
+import { randomUUID } from "crypto";
 
 export default async function createPostAction(formData: FormData) {
 	const user = await currentUser();
@@ -25,11 +29,30 @@ export default async function createPostAction(formData: FormData) {
 	};
 
 	try {
+		await connectDB();
+
 		if (image.size > 0) {
+			const accountName = process.env.AZURE_STORAGE_ACCOUNT_NAME;
+			const sasToken = await generateSASToken();
+			const sasUrl = `https://${accountName}.blob.core.windows.net/${containerName}?${sasToken}`;
+
+			const blobServiceClient = new BlobServiceClient(sasUrl);
+			const containerClient =
+				blobServiceClient.getContainerClient(containerName);
+			const timestamp = new Date().getTime();
+			const file_name = `${randomUUID()}_${timestamp}.png`;
+
+			const blockBlobClient = containerClient.getBlockBlobClient(file_name);
+			const imageBuffer = await image.arrayBuffer();
+
+			const res = await blockBlobClient.uploadData(imageBuffer);
+			imageUrl = res._response.request.url;
+			console.log("File uploaded successfully", imageUrl);
+
 			const body: AddPostRequestBody = {
 				user: userDb,
 				text: postInput,
-				// imageUrl: image_url
+				imageUrl,
 			};
 
 			await Post.create(body);
@@ -46,6 +69,6 @@ export default async function createPostAction(formData: FormData) {
 
 		// revalidatePath '/' - home page
 	} catch (error) {
-		throw new Error("Failed to create post", error as ErrorOptions);
+		console.log("Failed to create post", error as ErrorOptions)
 	}
 }
