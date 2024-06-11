@@ -4,7 +4,7 @@ const nextConfig = {
 		remotePatterns: [
 			{ hostname: "links.papareact.com", protocol: "https" },
 			{ hostname: "img.clerk.com", protocol: "https" },
-			{ hostname: "linkedinclone.blob.core.windows.net", protocol: "https" },
+			{ hostname: "linkedincloneprathamesh.blob.core.windows.net", protocol: "https" },
 		],
 	},
 };

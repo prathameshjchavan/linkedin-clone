@@ -46,8 +46,8 @@ export default async function createPostAction(formData: FormData) {
 			const blockBlobClient = containerClient.getBlockBlobClient(file_name);
 			const imageBuffer = await image.arrayBuffer();
 
-			const res = await blockBlobClient.uploadData(imageBuffer);
-			imageUrl = res._response.request.url;
+			await blockBlobClient.uploadData(imageBuffer);
+			imageUrl = blockBlobClient.url;
 			console.log("File uploaded successfully", imageUrl);
 
 			const body: AddPostRequestBody = {
