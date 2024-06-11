@@ -7,6 +7,8 @@ import { Badge } from "./ui/badge";
 import ReactTimeago from "react-timeago";
 import { Button } from "./ui/button";
 import { Trash2 } from "lucide-react";
+import deletePostAction from "@/actions/deletePostAction";
+import Image from "next/image";
 
 type PostProps = {
 	post: IPost;
@@ -47,12 +49,35 @@ const Post = ({ post }: PostProps) => {
 					</div>
 
 					{isAuthor && (
-						<Button variant="outline">
+						<Button
+							variant="outline"
+							onClick={() => {
+								const promise = deletePostAction(post._id.toString());
+
+								// Toast
+							}}
+						>
 							<Trash2 />
 						</Button>
 					)}
 				</div>
 			</div>
+
+			<div>
+				<p>{post.text}</p>
+
+				{post.imageUrl && (
+					<Image
+						src={post.imageUrl}
+						alt="post image"
+						width={500}
+						height={500}
+						className="w-full mx-auto"
+					/>
+				)}
+			</div>
+
+			{/* Post Options */}
 		</div>
 	);
 };
