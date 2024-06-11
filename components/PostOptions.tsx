@@ -17,6 +17,7 @@ const PostOptions = ({ post }: PostOptionsProps) => {
 	const { user } = useUser();
 	const [liked, setLiked] = useState(false);
 	const [likes, setLikes] = useState(post.likes);
+	const postId = post._id.toString();
 
 	const likeOrUnlikePost = async () => {
 		if (!user?.id) throw new Error("User not authenticated");
@@ -34,7 +35,7 @@ const PostOptions = ({ post }: PostOptionsProps) => {
 		setLikes(newLikes);
 
 		const response = await fetch(
-			`/api/posts/${post.id}/${liked ? "unlike" : "like"}`,
+			`/api/posts/${postId}/${liked ? "unlike" : "like"}`,
 			{
 				method: "POST",
 				headers: {
@@ -50,7 +51,7 @@ const PostOptions = ({ post }: PostOptionsProps) => {
 			throw new Error("Failed to Like or Unlike post");
 		}
 
-		const fetchLikeResponse = await fetch(`/api/posts/${post.id}/like`);
+		const fetchLikeResponse = await fetch(`/api/posts/${postId}/like`);
 		if (!fetchLikeResponse.ok) {
 			setLiked(originalLiked);
 			setLikes(originalLikes);
@@ -128,7 +129,7 @@ const PostOptions = ({ post }: PostOptionsProps) => {
 
 			{isCommentOpen && (
 				<div className="p-4">
-					{user?.id && <CommentForm postId={post._id.toString()} />}
+					{user?.id && <CommentForm postId={postId.toString()} />}
 					{/* <CommentFeed post={post} /> */}
 				</div>
 			)}
