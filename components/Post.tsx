@@ -9,6 +9,8 @@ import { Button } from "./ui/button";
 import { Trash2 } from "lucide-react";
 import deletePostAction from "@/actions/deletePostAction";
 import Image from "next/image";
+import { Fragment, useState } from "react";
+import PostOptions from "./PostOptions";
 
 type PostProps = {
 	post: IPost;
@@ -17,9 +19,14 @@ type PostProps = {
 const Post = ({ post }: PostProps) => {
 	const { user } = useUser();
 	const isAuthor = post.user.userId === user?.id;
+	const [loadingImg, setLoadingImg] = useState(true);
+
+	const onImageLoad = () => {
+		setLoadingImg(false);
+	};
 
 	return (
-		<div className="bg-white rounded-md border">
+		<div className="bg-white rounded-md border overflow-hidden">
 			<div className="p-4 flex space-x-2">
 				<Avatar>
 					<AvatarImage src={post.user.userImage} />
@@ -64,20 +71,31 @@ const Post = ({ post }: PostProps) => {
 			</div>
 
 			<div>
-				<p>{post.text}</p>
+				<p className="px-4 pb-2 mt-2">{post.text}</p>
 
 				{post.imageUrl && (
-					<Image
-						src={post.imageUrl}
-						alt="post image"
-						width={500}
-						height={500}
-						className="w-full mx-auto"
-					/>
+					<Fragment>
+						{loadingImg && (
+							<div className="w-[500px] h-[500px] flex items-center justify-center animate-pulse">
+								Loading...
+							</div>
+						)}
+						<Image
+							src={post.imageUrl}
+							priority
+							alt="post image"
+							width={500}
+							height={500}
+							onLoad={onImageLoad}
+							style={{ display: loadingImg ? "none" : "block" }}
+							className="w-full mx-auto"
+						/>
+					</Fragment>
 				)}
 			</div>
 
 			{/* Post Options */}
+			<PostOptions post={post} />
 		</div>
 	);
 };
