@@ -38,14 +38,16 @@ const Post = ({ post }: PostProps) => {
 
 				<div className="flex justify-between flex-1">
 					<div>
-						<p className="font-semibold">
-							{post.user.firstName} {post.user.lastName}{" "}
+						<div className="flex items-center">
+							<p className="font-semibold">
+								{post.user.firstName} {post.user.lastName}{" "}
+							</p>
 							{isAuthor && (
 								<Badge className="ml-2" variant="secondary">
 									Author
 								</Badge>
 							)}
-						</p>
+						</div>
 						<p className="text-xs text-gray-400">
 							@{post.user.firstName}
 							{post.user.lastName}-{post.user.userId.slice(-4)}
