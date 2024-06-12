@@ -24,12 +24,12 @@ const CommentFeed = ({ post }: CommentFeedProps) => {
 						</AvatarFallback>
 					</Avatar>
 
-					<div className="bg-gray-100 px-4 py-2 rounded-md w-full sm:w-auto md:min-w-[300px]">
+					<div className="bg-gray-100 px-4 py-2 rounded-md w-full sm:w-auto sm:min-w-[400px]">
 						<div className="flex justify-between">
 							<div>
 								<p className="font-semibold">
 									{comment.user.firstName} {comment.user.lastName}
-									{isAuthor && <Badge>Author</Badge>}
+									{isAuthor && <Badge className="ml-2">Author</Badge>}
 								</p>
 								<p className="text-xs text-gray-400">
 									@{comment.user.firstName}

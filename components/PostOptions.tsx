@@ -7,6 +7,7 @@ import { Button } from "./ui/button";
 import { MessageCircle, Repeat2, Send, ThumbsUpIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import CommentFeed from "./CommentFeed";
+import CommentForm from "./CommentForm";
 
 interface PostOptionsProps {
 	post: IPost;
@@ -129,8 +130,10 @@ const PostOptions = ({ post }: PostOptionsProps) => {
 
 			{isCommentOpen && (
 				<div className="p-4">
-					<SignedIn>{/* <CommentForm postId={post.id} /> */}</SignedIn>
-					
+					<SignedIn>
+						<CommentForm postId={post._id.toString()} />
+					</SignedIn>
+
 					<CommentFeed post={post} />
 				</div>
 			)}
