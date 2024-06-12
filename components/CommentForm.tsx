@@ -4,6 +4,7 @@ import { useUser } from "@clerk/nextjs";
 import { useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import createCommentAction from "@/actions/createCommentAction";
+import CommentFormFields from "./CommentFormFields";
 
 interface CommentFormProps {
 	postId: string;
@@ -44,17 +45,7 @@ const CommentForm = ({ postId }: CommentFormProps) => {
 				</AvatarFallback>
 			</Avatar>
 
-			<div className="flex flex-1 bg-white border rounded-full px-3 py-2">
-				<input
-					type="text"
-					name="commentInput"
-					placeholder="Add a comment..."
-					className="outline-none flex-1 text-sm bg-transparent"
-				/>
-				<button type="submit" hidden>
-					Comment
-				</button>
-			</div>
+			<CommentFormFields />
 		</form>
 	);
 };
