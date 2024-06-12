@@ -1,12 +1,12 @@
 "use client";
 
 import { IPost } from "@/mongodb/models/post";
-import { useUser } from "@clerk/nextjs";
+import { SignedIn, useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { MessageCircle, Repeat2, Send, ThumbsUpIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import CommentForm from "./CommentForm";
+import CommentFeed from "./CommentFeed";
 
 interface PostOptionsProps {
 	post: IPost;
@@ -129,8 +129,9 @@ const PostOptions = ({ post }: PostOptionsProps) => {
 
 			{isCommentOpen && (
 				<div className="p-4">
-					{user?.id && <CommentForm postId={postId.toString()} />}
-					{/* <CommentFeed post={post} /> */}
+					<SignedIn>{/* <CommentForm postId={post.id} /> */}</SignedIn>
+					
+					<CommentFeed post={post} />
 				</div>
 			)}
 		</div>
