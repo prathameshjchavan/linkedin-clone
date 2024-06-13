@@ -6,6 +6,7 @@ export interface IPostBase {
 	user: IUser;
 	text: string;
 	imageUrl?: string;
+	imageName?: string;
 	comments?: IComment[];
 	likes?: string[];
 }
@@ -15,6 +16,7 @@ interface IPostMethods {
 	unlikePost(userId: string): Promise<void>;
 	commentOnPost(comment: ICommentBase): Promise<void>;
 	getAllComments(): Promise<IComment[]>;
+	deleteComments(): Promise<void>;
 	removePost(): Promise<void>;
 }
 
@@ -40,6 +42,7 @@ const PostSchema = new Schema<IPost>(
 		},
 		text: { type: String, required: true },
 		imageUrl: { type: String },
+		imageName: { type: String },
 		comments: { type: [Schema.Types.ObjectId], ref: "Comment", default: [] },
 		likes: { type: [String] },
 	},
@@ -84,8 +87,21 @@ PostSchema.methods.getAllComments = async function () {
 	}
 };
 
+PostSchema.methods.deleteComments = async function () {
+	try {
+		const comments = this.comments;
+		if (!comments) return;
+		for (let comment of comments) {
+			await this.model("Comment").deleteOne({ _id: comment });
+		}
+	} catch (error) {
+		console.log("Error when removing comments: ", error);
+	}
+};
+
 PostSchema.methods.removePost = async function () {
 	try {
+		await this.deleteComments();
 		await this.model("Post").deleteOne({ _id: this._id });
 	} catch (error) {
 		console.log("Error when removing post: ", error);

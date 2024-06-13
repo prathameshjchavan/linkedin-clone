@@ -8,6 +8,7 @@ import { SignedIn } from "@clerk/nextjs";
 
 export default async function Home() {
 	await connectDB();
+	// @ts-ignore
 	const posts = await Post.getAllPosts();
 
 	return (

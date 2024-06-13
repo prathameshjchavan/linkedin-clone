@@ -32,7 +32,7 @@ async function generateSASToken() {
 	const sasToken = generateBlobSASQueryParameters(
 		{
 			containerName,
-			permissions: BlobSASPermissions.parse("rcw"),
+			permissions: BlobSASPermissions.parse("rcwd"),
 			expiresOn: expiryDate,
 		},
 		sharedKeyCredential

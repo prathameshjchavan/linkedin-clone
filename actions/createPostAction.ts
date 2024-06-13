@@ -2,6 +2,7 @@
 
 import { AddPostRequestBody } from "@/app/api/posts/route";
 import generateSASToken, { containerName } from "@/lib/generateSASToken";
+import generateSASUrl from "@/lib/generateSASUrl";
 import connectDB from "@/mongodb/db";
 import { Post } from "@/mongodb/models/post";
 import { IUser } from "@/types/user";
@@ -33,9 +34,7 @@ export default async function createPostAction(formData: FormData) {
 		await connectDB();
 
 		if (image.size > 0) {
-			const accountName = process.env.AZURE_STORAGE_ACCOUNT_NAME;
-			const sasToken = await generateSASToken();
-			const sasUrl = `https://${accountName}.blob.core.windows.net/${containerName}?${sasToken}`;
+			const sasUrl = await generateSASUrl();
 
 			const blobServiceClient = new BlobServiceClient(sasUrl);
 			const containerClient =
@@ -54,6 +53,7 @@ export default async function createPostAction(formData: FormData) {
 				user: userDb,
 				text: postInput,
 				imageUrl,
+				imageName: file_name,
 			};
 
 			await Post.create(body);
@@ -68,6 +68,6 @@ export default async function createPostAction(formData: FormData) {
 
 		revalidatePath("/");
 	} catch (error) {
-		console.log("Failed to create post", error as ErrorOptions)
+		console.log("Failed to create post", error as ErrorOptions);
 	}
 }

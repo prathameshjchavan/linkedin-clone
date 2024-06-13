@@ -8,6 +8,7 @@ import { MessageCircle, Repeat2, Send, ThumbsUpIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import CommentFeed from "./CommentFeed";
 import CommentForm from "./CommentForm";
+import { toast } from "sonner";
 
 interface PostOptionsProps {
 	post: IPost;
@@ -93,7 +94,15 @@ const PostOptions = ({ post }: PostOptionsProps) => {
 
 			<div className="flex p-2 justify-between border-t">
 				<Button
-					onClick={likeOrUnlikePost}
+					onClick={() => {
+						const promise = likeOrUnlikePost()
+
+						toast.promise(promise, {
+							loading: liked ? "Unliking post..." : "Liking post...",
+							success: liked ? "Post  Unliked" : "Post liked",
+							error: liked ? "Failed to unlike post" : "Failed to like post",
+						});
+					}}
 					variant="ghost"
 					className="postButton"
 				>

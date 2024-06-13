@@ -8,6 +8,7 @@ export interface AddPostRequestBody {
 	user: IUser;
 	text: string;
 	imageUrl?: string | null;
+	imageName?: string | null;
 }
 
 export async function POST(request: Request) {
@@ -16,12 +17,13 @@ export async function POST(request: Request) {
 	try {
 		await connectDB();
 
-		const { user, text, imageUrl }: AddPostRequestBody = await request.json();
+		const { user, text, imageUrl, imageName }: AddPostRequestBody = await request.json();
 
 		const postData: IPostBase = {
 			user,
 			text,
 			...(imageUrl && { imageUrl }),
+			...(imageName && { imageName }),
 		};
 
 		const post = await Post.create(postData);
@@ -42,6 +44,7 @@ export async function GET(request: Request) {
 	try {
 		await connectDB();
 
+		// @ts-ignore
 		const posts = await Post.getAllPosts();
 
 		return NextResponse.json({ posts });
