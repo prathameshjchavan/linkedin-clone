@@ -11,6 +11,7 @@ import deletePostAction from "@/actions/deletePostAction";
 import Image from "next/image";
 import { Fragment, useState } from "react";
 import PostOptions from "./PostOptions";
+import { toast } from "sonner";
 
 type PostProps = {
 	post: IPost;
@@ -64,6 +65,11 @@ const Post = ({ post }: PostProps) => {
 								const promise = deletePostAction(post._id.toString());
 
 								// Toast
+								toast.promise(promise, {
+									loading: "Deleting post...",
+									success: "Post deleted",
+									error: "Failed to delete post",
+								});
 							}}
 						>
 							<Trash2 />

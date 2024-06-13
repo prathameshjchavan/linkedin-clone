@@ -3,9 +3,9 @@
 import { useRef, useState } from "react";
 import createPostAction from "@/actions/createPostAction";
 import PostFormFields from "./PostFormFields";
+import { toast } from "sonner";
 
 const PostForm = () => {
-	
 	const ref = useRef<HTMLFormElement>(null);
 	const [preview, setPreview] = useState<string | null>(null);
 
@@ -30,11 +30,16 @@ const PostForm = () => {
 		<div className="mb-2">
 			<form
 				ref={ref}
-				action={(formData) => {
+				action={async (formData) => {
 					// handle form submittion with server action
-					handlePostAction(formData);
+					const promise = handlePostAction(formData);
 
 					// Toast notification based on the promise above
+					toast.promise(promise, {
+						loading: "Creating post...",
+						success: "Post created",
+						error: "Failed to create post",
+					});
 				}}
 				className="p-3 bg-white rounded-lg border"
 			>

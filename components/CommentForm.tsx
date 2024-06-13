@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import createCommentAction from "@/actions/createCommentAction";
 import CommentFormFields from "./CommentFormFields";
+import { toast } from "sonner";
 
 interface CommentFormProps {
 	postId: string;
@@ -34,6 +35,12 @@ const CommentForm = ({ postId }: CommentFormProps) => {
 			ref={ref}
 			action={(formData) => {
 				const promise = handleCommentAction(formData);
+
+				toast.promise(promise, {
+					loading: "Creating comment...",
+					success: "Comment created",
+					error: "Failed to create comment",
+				});
 			}}
 			className="flex items-center space-x-1"
 		>
