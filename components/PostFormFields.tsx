@@ -74,6 +74,7 @@ const PostFormFields = ({ preview, setPreview }: PostFormFieldsProps) => {
 
 			<div className="flex justify-end mt-2 space-x-2">
 				<Button
+					variant={preview ? "secondary" : "outline"}
 					type="button"
 					disabled={pending}
 					onClick={() => fileInputRef.current?.click()}
