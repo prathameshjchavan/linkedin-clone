@@ -61,9 +61,9 @@ const PostFormFields = ({ preview, setPreview }: PostFormFieldsProps) => {
 					hidden
 				/>
 
-				<button disabled={pending} type="submit" hidden>
+				<Button variant="blue" disabled={pending} type="submit">
 					Post
-				</button>
+				</Button>
 			</div>
 
 			{preview && (
